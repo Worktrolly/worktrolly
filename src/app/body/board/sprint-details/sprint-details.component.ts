@@ -14,11 +14,11 @@ import { Sprint } from 'src/app/Interface/TeamInterface';
 export class SprintDetailsComponent implements OnInit {
 
   @Input('currentSprintName') currentSprintName: string;
-  @Input('currentSprintNumber') currentSprintNumber:number
+  @Input('currentSprintNumber') currentSprintNumber: number
   @Input('sprintData') sprintData: Sprint;
   @Output() currentSprint = new EventEmitter<number>();
 
-  componentName :string="SPRINT-DETAILS"
+  componentName: string = "SPRINT-DETAILS"
   filterSprintNumber: number;
 
   constructor(public applicationSettingsService: ApplicationSettingsService, private functions: AngularFireFunctions, public errorHandlerService: ErrorHandlerService, public backendService: BackendService, private router: Router) { }
@@ -27,14 +27,14 @@ export class SprintDetailsComponent implements OnInit {
   }
 
   async changeSprintStatus(sprintStatus: string) {
-    const callable = this.functions.httpsCallable('updateSprintStatus');
+    const callable = this.functions.httpsCallable('sprints');
     const appKey = this.backendService.getOrganizationAppKey();
     try {
-      const result = await callable({ AppKey: appKey, CurrentSprintName: this.currentSprintName, SprintStatus: sprintStatus }).toPromise();
+      const result = await callable({ mode: "update", AppKey: appKey, CurrentSprintName: this.currentSprintName, SprintStatus: sprintStatus, TeamId: this.sprintData.TeamId }).toPromise();
       console.log(sprintStatus);
       console.log("Successfully updated Status");
     } catch (error) {
-      this.errorHandlerService.getErrorCode(this.componentName,"InternalError");
+      this.errorHandlerService.getErrorCode(this.componentName, "InternalError");
     }
   }
 
@@ -43,18 +43,18 @@ export class SprintDetailsComponent implements OnInit {
   }
 
   showTasks() {
-    this.router.navigate(['/Tasks', this.sprintData.TeamId, this.currentSprintName])  
+    this.router.navigate(['/Tasks', this.sprintData.TeamId, this.currentSprintName])
   }
-  
-  ActiveSprint(){
+
+  ActiveSprint() {
     this.currentSprint.emit(this.currentSprintNumber);
   }
 
-  showBacklog(){
+  showBacklog() {
     this.currentSprint.emit(-1);
   }
-  
-  showDeleted(){
+
+  showDeleted() {
     this.currentSprint.emit(-2);
   }
 }

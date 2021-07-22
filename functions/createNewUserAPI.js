@@ -38,11 +38,11 @@ exports.createNewUser = functions.https.onRequest((request, response) => {
                     AppTheme: "theme-light",
                     GithubProfile: "",
                     LinkedInProfile: "",
-                    DateOfJoining: ""
+                    DateOfJoining: "",
                 });
                 return Promise.resolve(userData);
             } else {
-               return;
+                return;
             }
         });
         const promise2 = db.collection("RawData").doc("AppDetails").get().then((doc) => {

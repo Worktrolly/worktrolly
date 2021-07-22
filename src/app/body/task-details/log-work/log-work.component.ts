@@ -56,11 +56,11 @@ export class LogWorkComponent implements OnInit {
 
   async submitLogWorkPage() {
     this.enableLoader = true;
-    const callable = this.functions.httpsCallable('logWork');
+    const callable = this.functions.httpsCallable('tasks');
     const appKey = this.backendService.getOrganizationAppKey();
 
     try {
-      const result = await callable({ AppKey: appKey, SprintNumber: this.task.SprintNumber, LogTaskId: this.task.Id, LogHours: this.logHours, LogWorkDone: this.logWorkDone, LogWorkStatus: this.logWorkStatus, LogWorkComment: this.logWorkComment, Date: this.todayDate, Time: this.time }).toPromise();
+      const result = await callable({ mode: "log", AppKey: appKey, SprintNumber: this.task.SprintNumber, LogTaskId: this.task.Id, LogHours: this.logHours, LogWorkDone: this.logWorkDone, LogWorkStatus: this.logWorkStatus, LogWorkComment: this.logWorkComment, Date: this.todayDate, Time: this.time }).toPromise();
 
       console.log("Logged Work Successfully");
       console.log(result);

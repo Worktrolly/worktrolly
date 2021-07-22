@@ -16,7 +16,7 @@ export class Patch1Component implements OnInit {
   showLoader: boolean = false;
 
 
-  constructor(private functions: AngularFireFunctions,private location: Location,public toolsService: ToolsService) { }
+  constructor(private functions: AngularFireFunctions, private location: Location, public toolsService: ToolsService) { }
 
   ngOnInit(): void {
     this.todayDate = this.toolsService.date();
@@ -27,9 +27,9 @@ export class Patch1Component implements OnInit {
     this.showLoader = true;
     console.log("Patch1 function running");
     console.log(this.orgDomain, this.orgId, this.teamId);
-    const callable = this.functions.httpsCallable('patch1');
-    await callable({OrgId: this.orgId, OrgDomain: this.orgDomain, TeamId: this.teamId}).toPromise().then(result => {
-      this.showLoader=false;
+    const callable = this.functions.httpsCallable('patch');
+    await callable({ mode: "patch1", OrgId: this.orgId, OrgDomain: this.orgDomain, TeamId: this.teamId }).toPromise().then(result => {
+      this.showLoader = false;
       console.log(result);
     });
   }

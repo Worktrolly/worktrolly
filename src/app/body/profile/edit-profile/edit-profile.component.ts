@@ -20,26 +20,26 @@ export class EditProfileComponent implements OnInit {
   enableLoader: boolean = false
   showClose: boolean = false
 
-  constructor(private functions: AngularFireFunctions,  private router: Router) { }
+  constructor(private functions: AngularFireFunctions, private router: Router) { }
 
   ngOnInit(): void {
   }
 
-  async editProfile(){
-    this.enableLoader = true 
-      const callable = this.functions.httpsCallable('updateUserProfile');
-      try {
-        await callable({Uid: this.uid, AboutMe: this.aboutMe, DisplayName: this.displayName, PhoneNumber: this.phoneNumber, GithubProfile: this.githubProfile, LinkedInProfile: this.linkedInProfile}).toPromise();
-        console.log("Successful");
-        this.showClose = true
-      } catch (error) {
-        console.log("error");
-        this.enableLoader = false
-      }
+  async editProfile() {
+    this.enableLoader = true
+    const callable = this.functions.httpsCallable('users');
+    try {
+      await callable({ mode: "update", Uid: this.uid, AboutMe: this.aboutMe, DisplayName: this.displayName, PhoneNumber: this.phoneNumber, GithubProfile: this.githubProfile, LinkedInProfile: this.linkedInProfile }).toPromise();
+      console.log("Successful");
+      this.showClose = true
+    } catch (error) {
+      console.log("error");
+      this.enableLoader = false
+    }
   }
 
-  editProfileDone(){
+  editProfileDone() {
     this.editProfileCompleted.emit({ completed: true });
   }
-  
+
 }

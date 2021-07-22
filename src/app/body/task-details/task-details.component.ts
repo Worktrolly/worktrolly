@@ -48,11 +48,11 @@ export class TaskDetailsComponent implements OnInit {
 
     this.navbarHandler.addToNavbar(this.Id);
 
-    this.authService.afauth.user.subscribe(data =>{
+    this.authService.afauth.user.subscribe(data => {
       this.authService.userAppSettingObservable.subscribe(data => {
-        if(data.AppKey) {
+        if (data.AppKey) {
           this.backendService.organizationsData.subscribe(data => {
-            this.orgDomain =  this.backendService.getOrganizationDomain();
+            this.orgDomain = this.backendService.getOrganizationDomain();
             this.getTaskDetail();
             this.getActivityData();
           });
@@ -62,7 +62,7 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   getTaskDetail() {
-    var documentName = 'Organizations/'+this.orgDomain+'/Tasks/' + this.Id;
+    var documentName = 'Organizations/' + this.orgDomain + '/Tasks/' + this.Id;
     this.taskDocument = this.db.doc<Tasks>(documentName);
     this.taskDataObservable = this.taskDocument.snapshotChanges().pipe(
       map(actions => {
@@ -73,7 +73,7 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   getActivityData() {
-    var documentName = 'Organizations/'+this.orgDomain+'/Activity/' + this.Id + '/Action';
+    var documentName = 'Organizations/' + this.orgDomain + '/Activity/' + this.Id + '/Action';
     this.tasksCollection = this.db.collection<Activity>(documentName);
     this.activityData = this.tasksCollection.snapshotChanges().pipe(
       map(actions => actions.map(a => {
@@ -84,7 +84,7 @@ export class TaskDetailsComponent implements OnInit {
     );
   }
 
-  CloneTaskPage(){
+  CloneTaskPage() {
     this.cloneTask.getCloneTask(this.task);
   }
   logWorkPage() {
@@ -104,10 +104,10 @@ export class TaskDetailsComponent implements OnInit {
   }
 
   async deleteTask() {
-    const callable = this.functions.httpsCallable('deleteTask');
+    const callable = this.functions.httpsCallable('tasks');
     const appKey = this.backendService.getOrganizationAppKey();
     try {
-      const result = await callable({ AppKey: appKey, Id: this.task.Id, SprintNumber: this.task.SprintNumber, Project: this.task.Project, Status: this.task.Status, Date: this.todayDate, Time: this.time }).toPromise();
+      const result = await callable({ mode: "delete", AppKey: appKey, Id: this.task.Id, SprintNumber: this.task.SprintNumber, Project: this.task.Project, Status: this.task.Status, Date: this.todayDate, Time: this.time }).toPromise();
       console.log(this.task.Id + " deleted");
       console.log(result);
       this.router.navigate(['/']);

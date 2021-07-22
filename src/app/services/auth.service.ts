@@ -42,9 +42,9 @@ export class AuthService {
   }
 
   async createUserData(user: User) {
-    const callable = this.functions.httpsCallable('createNewUser');
+    const callable = this.functions.httpsCallable('users');
     try {
-      const result = await callable({ uid: user.uid, photoURL: user.photoURL, displayName: user.displayName, email: user.email, phoneNumber: user.phoneNumber, providerId: user.providerId }).toPromise();
+      const result = await callable({ mode: "create", uid: user.uid, photoURL: user.photoURL, displayName: user.displayName, email: user.email, phoneNumber: user.phoneNumber, providerId: user.providerId }).toPromise();
       console.log(result);
     } catch (error) {
       console.error("Error", error);

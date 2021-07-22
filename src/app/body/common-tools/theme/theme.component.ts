@@ -16,30 +16,30 @@ export class ThemeComponent implements OnInit {
   constructor(public themeService: ThemeService, private functions: AngularFireFunctions) { }
 
   ngOnInit(): void {
-    if(this.appTheme == 'theme-dark'){
+    if (this.appTheme == 'theme-dark') {
       this.enableDarkTheme = true;
-    }else{
+    } else {
       this.enableDarkTheme = false;
     }
   }
 
-  changeThemeSwitch(){
-    if(!this.enableDarkTheme){
+  changeThemeSwitch() {
+    if (!this.enableDarkTheme) {
       return this.updateTheme('theme-dark')
     }
-    else{
+    else {
       return this.updateTheme('theme-light')
     }
-   
+
   }
 
-  async updateTheme(appTheme: string){
+  async updateTheme(appTheme: string) {
+    const callable = this.functions.httpsCallable('users');
     this.showloader = true;
     this.themeService.changeTheme(appTheme);
-    const callable = this.functions.httpsCallable('updateTheme');
 
     try {
-      const result = await callable({Uid: this.uid, AppTheme: appTheme}).toPromise();
+      const result = await callable({ mode: "update-theme", Uid: this.uid, AppTheme: appTheme }).toPromise();
       this.showloader = false;
       console.log("Successfully created the task");
       console.log(result);

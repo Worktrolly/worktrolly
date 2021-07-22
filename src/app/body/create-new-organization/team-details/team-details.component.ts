@@ -28,7 +28,7 @@ export class TeamDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.selectedTeamId = this.route.snapshot.params['teamId'];
     console.log(this.selectedTeamId);
-    if(this.selectedTeamId != undefined){
+    if (this.selectedTeamId != undefined) {
       this.applicationSettings.getTeamDetails(this.selectedTeamId).subscribe(teams => {
         this.teamName = teams[0].TeamName;
         this.teamId = teams[0].TeamId;
@@ -123,13 +123,13 @@ export class TeamDetailsComponent implements OnInit {
   async createNewTeamWithLabels() {
     this.enableLoader = true;
     this.teamFormSubmitted.emit({ submitted: true })
-    const callable = this.functions.httpsCallable('createNewTeamWithLabels');
-    if(this.organizationDomain == undefined){
+    const callable = this.functions.httpsCallable('teams');
+    if (this.organizationDomain == undefined) {
       this.organizationDomain = this.backendService.getOrganizationDomain();
     }
 
     try {
-      const result = await callable({ OrganizationDomain: this.organizationDomain, TeamName: this.teamName, TeamId: this.teamId, TeamDescription: this.teamDescription, TeamManagerEmail: this.teamManagerEmail, TeamMembers: this.teamMemberEmailArray, TaskLabels: this.taskLabels, StatusLabels: this.statusLabels, PriorityLabels: this.priorityLabels, DifficultyLabels: this.difficultyLabels, DateOfJoining: this.toolsService.date() }).toPromise();
+      const result = await callable({ mode: "create", OrganizationDomain: this.organizationDomain, TeamName: this.teamName, TeamId: this.teamId, TeamDescription: this.teamDescription, TeamManagerEmail: this.teamManagerEmail, TeamMembers: this.teamMemberEmailArray, TaskLabels: this.taskLabels, StatusLabels: this.statusLabels, PriorityLabels: this.priorityLabels, DifficultyLabels: this.difficultyLabels, DateOfJoining: this.toolsService.date() }).toPromise();
       console.log(result);
       this.enableLoader = false;
       this.teamFormSubmitted.emit({ submitted: false });
